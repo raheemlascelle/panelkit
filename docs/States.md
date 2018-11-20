@@ -63,6 +63,34 @@ extension MyPanelManager {
         restorePanelStates(states)
 		
     }
+	func savePanelStates() {
+		
+		let states = self.panelStates
+		
+		let encoder = JSONEncoder()
+		
+		guard let json = try? encoder.encode(states) else {
+			return
+		}
+		
+		UserDefaults.standard.set(json, forKey: "panelStates")
+		
+	}
+	
+	func restorePanelStatesFromDisk() {
+		
+		guard let jsonData = UserDefaults.standard.data(forKey: "panelStates") else {
+			return
+		}
+		
+		let decoder = JSONDecoder()
+		guard let states = try? decoder.decode([Int: PanelState].self, from: jsonData) else {
+			return
+		}
+		
+		restorePanelStates(states)
+		
+	}
 	
 }
 ```
